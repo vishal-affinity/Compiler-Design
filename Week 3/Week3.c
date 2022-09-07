@@ -1,18 +1,13 @@
 #include <stdio.h>
-#include <stdlib.h>
-#include <malloc.h>
-#include <string.h>
 #include <ctype.h>
+#include <string.h>
 
-int size = 0;
 
-char keyword[30][30] = {"int", "while", "break", "for", "do", "if", "float", "char", "switch", "double", "short", "long", "unsigned", "sizeof", "else", "register", "extern", "static", "auto", "case", "break", "volatile", "enum", "typedef"};
-
-char id[20], num[10], op[5];
-
+char keyword[30][30] = {"int", "while", "break", "for", "do", "if", "float", "char", "switch", "double "," short "," long "," unsigned "," sizeof "," else "," register "," extern "," static "," auto "," case "," break "," volatile "," enum "," typedef "};
+char id[50], num[10],syn[10];
 char symb_tab[50][20];
 int idx = 0;
-
+// declare symbol table as a doubly dimensional array of characters.
 int check_keyword(char s[])
 {
     int i;
@@ -22,7 +17,7 @@ int check_keyword(char s[])
     return 0;
 }
 
-void store_symb_tab(char id[], char symb_tab[][20])
+void store_symb_tab(char id[],char symb_tab[][20])
 {
     int flag = 0, i;
     for (i = 0; i < idx; i++)
@@ -34,17 +29,23 @@ void store_symb_tab(char id[], char symb_tab[][20])
     }
     if (flag == 0)
     {
-        strcpy(symb_tab[idx], id);
+        symb_tab[i][idx] =  id[i];
         idx++;
-    }
+    }    
 }
 
-void main()
+/*write a function to store identifier in symbol table
+void store_symb_tab(char id[], char symb_tab[][20])
+{
+Check whether the id is already available in the symbol table, if available,
+ignore. otherwise add it.
+}*/
+int main()
 {
     FILE *fp1, *fp2;
     char c;
     int state = 0;
-    int i = 0, j = 0, k = 0;
+    int i = 0, j = 0,k = 0;
     fp1 = fopen("x.txt", "r"); // input file containing src prog
     fp2 = fopen("y.txt", "w"); // output file name
 
@@ -66,12 +67,12 @@ void main()
             else if (c == '<' || c == '>')
             {
                 state = 5;
-                op[k++] = c;
+                syn[k++] = c;
             }
             else if (c == '=' || c == '!')
             {
                 state = 8;
-                op[k++] = c;
+                syn[k++] = c;
             }
             else if (c == '/')
                 state = 10;
@@ -90,14 +91,14 @@ void main()
             {
                 id[i] = '\0';
                 if (check_keyword(id))
-                    fprintf(fp2, "\n%s : keyword ", id);
+                    fprintf(fp2, " \n %s : keyword ", id);
                 else
                 {
-                    fprintf(fp2, "\n%s : identifier", id);
+                    fprintf(fp2, "\n %s : identifier", id);
                     store_symb_tab(id, symb_tab);
-                }
-                // call a function which stores id in symbol table
 
+                }            
+                // call a function which stores id in symbol table
                 state = 0;
                 i = 0;
                 ungetc(c, fp1);
@@ -112,7 +113,7 @@ void main()
             else
             {
                 num[j] = '\0';
-                fprintf(fp2, "\n%s: number", num);
+                fprintf(fp2, " \n%s: number", num);
                 state = 0;
                 j = 0;
                 ungetc(c, fp1);
@@ -130,17 +131,17 @@ void main()
                 state = 0;
                 ungetc(c, fp1);
             }
-            op[k++] = c;
-            op[k] = '\0';
-            fprintf(fp2, "\n%s : relational operator ", op);
+            syn[k++] = c;
+            syn[k] = '\0';
+            fprintf(fp2, "\n%s : relational operator ", syn);
             k = 0;
             break;
         case 8:
             if (c == '=')
             {
-                op[k++] = c;
-                op[k] = '\0';
-                fprintf(fp2, "\n%s : relational operator ", op);
+                syn[k++] = c;
+                syn[k] = '\0';
+                fprintf(fp2, "\n%s : relational operator ", syn);
                 k = 0;
                 // write code to print specific operator like == or !=
                 state = 0;
@@ -155,7 +156,7 @@ void main()
             if (c == '*')
                 state = 11;
             else
-                fprintf(fp2, "\ninvalid lexeme");
+                fprintf(fp2, "\n invalid lexeme");
             break;
         case 11:
             if (c == '*')
@@ -178,4 +179,5 @@ void main()
         fprintf(fp2, "comment did not close");
     fclose(fp1);
     fclose(fp2);
+    return 0;
 }
