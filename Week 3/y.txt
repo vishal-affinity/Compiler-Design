@@ -1,7 +1,71 @@
-int main() {
-    if (1 <= 0) {
-        printtrue();
-    } else {
-        printfalse();
-    }
+ 
+ int : keyword 
+ main : identifier
+(
+)
+{ 
+ int : keyword 
+ num1 : identifier
+,
+ num2 : identifier
+,
+ sum : identifier
+;
+ printf : identifier
+(
+"
+ Enter : identifier
+ two : identifier
+ integers : identifier
+:
+"
+)
+;
+ scanf : identifier
+(
+"
+%
+ d : identifier
+%
+ d : identifier
+"
+,
+&
+ num1 : identifier
+,
+&
+ num2 : identifier
+)
+;
+ sum : identifier
+ num1 : identifier
++
+ num2 : identifier
+;
+ printf : identifier
+(
+"
+ Sum : identifier
+ of : identifier
+%
+ d : identifier
+ and : identifier
+%
+ d : identifier
+ is : identifier
+:
+%
+ d : identifier
+"
+,
+ num1 : identifier
+,
+ num2 : identifier
+,
+ sum : identifier
+)
+;
+ return : identifier 
+0: number
+;
 }
